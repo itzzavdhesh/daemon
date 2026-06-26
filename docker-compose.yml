@@ -1,0 +1,71 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: daemon-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: daemon_user
+      POSTGRES_PASSWORD: daemon_pass
+      POSTGRES_DB: daemon_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U daemon_user -d daemon_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - daemon_network
+
+  server:
+    build:
+      context: ./server
+    container_name: daemon-server
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://daemon_user:daemon_pass@postgres:5432/daemon_db
+      JWT_SECRET: your_super_secret_jwt_key_change_this_in_production
+      PORT: 4000
+      CLIENT_URL: http://localhost:3000
+      NODE_ENV: development
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: sh -c "npm run migrate && npm run dev"
+    networks:
+      - daemon_network
+
+  client:
+    build:
+      context: ./client
+    container_name: daemon-client
+    restart: unless-stopped
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:4000
+      SERVER_API_URL: http://server:4000
+      NODE_ENV: development
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      - server
+    command: npm run dev
+    networks:
+      - daemon_network
+
+volumes:
+  postgres_data:
+
+networks:
+  daemon_network:
+    driver: bridge
