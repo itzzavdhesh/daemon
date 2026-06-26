@@ -1,0 +1,45 @@
+- name: good first issue
+  color: "7FD86B"
+  description: Great for beginners
+- name: help wanted
+  color: "4A90D9"
+  description: Extra attention needed
+- name: bug
+  color: "D73A4A"
+  description: Something is broken
+- name: enhancement
+  color: "A855F7"
+  description: New feature or improvement
+- name: documentation
+  color: "0075CA"
+  description: Docs improvements
+- name: "area: frontend"
+  color: "F97316"
+  description: Canvas and UI work
+- name: "area: backend"
+  color: "6366F1"
+  description: API and database work
+- name: "area: compiler"
+  color: "14B8A6"
+  description: Code generation
+- name: "area: docs"
+  color: "6B7280"
+  description: Documentation
+- name: "level: easy"
+  color: "BBF7D0"
+  description: Basic knowledge needed
+- name: "level: medium"
+  color: "FDE68A"
+  description: Some experience needed
+- name: "level: hard"
+  color: "FCA5A5"
+  description: Advanced knowledge needed
+- name: GSSoC
+  color: "F59E0B"
+  description: GSSoC tracked issue
+- name: wontfix
+  color: "FFFFFF"
+  description: Will not be fixed
+- name: duplicate
+  color: "CCCCCC"
+  description: Already exists
